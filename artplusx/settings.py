@@ -1,4 +1,5 @@
 import os
+import _pickle as pickle
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -7,13 +8,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
+with open(os.path.join(BASE_DIR, 'sensitives.pickle'), 'rb') as f:
+    sensitives = pickle.load(f)
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'v8(=bqqm01=s)i6urmxyrnkz(529y1sp&mq)*p8vtby7_phn3d'
+SECRET_KEY = sensitives['SECRET_KEY']
+IP_ADDRESS = sensitives['IP_ADDRESS']
+DB_NAME = sensitives['DB_NAME']
+DB_USER = sensitives['DB_USER']
+DB_PW = sensitives['DB_PW']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = sensitives['DEBUG']
 
-ALLOWED_HOSTS = ['45.32.63.193', '127.0.0.1', '127.0.1.1']
+ALLOWED_HOSTS = [IP_ADDRESS, '127.0.0.1', '127.0.1.1']
 
 
 # Application definition
@@ -42,7 +50,7 @@ ROOT_URLCONF = 'artplusx.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -60,14 +68,18 @@ WSGI_APPLICATION = 'artplusx.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+if DEBUG:
+    HOST = IP_ADDRESS
+else:
+    HOST = 'localhost'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'artplusx',
-        'USER': 'artplusx',
-        'PASSWORD': 'makeitpopweartplusx!1',
-        'HOST': 'localhost',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PW,
+        'HOST': HOST,
         'PORT': '',
     }
 }
@@ -103,7 +115,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -111,3 +123,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_DIR = os.path.join(BASE_DIR, 'static-dev/')
+STATICFILES_DIRS = [
+    os.path.join(STATIC_DIR, "dist"),
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
