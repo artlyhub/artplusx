@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load thumbnail %}
+
+{% block javascript %}
+  <!-- <script src="{% static 'jquery.ui.widget.js' %}"></script>
+  <script src="{% static 'jquery.iframe-transport.js' %}"></script>
+  <script src="{% static 'jquery.fileupload.js' %}"></script> -->
+  <script src="{% static 'basic-upload.js' %}"></script>
+  <script src="{% static 'masonry.pkgd.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+  <!-- <div style="margin-bottom: 20px;">
+    <button type="button" class="btn btn-primary js-upload-photos">
+      <span class="glyphicon glyphicon-cloud-upload"></span> 사진 업로드
+    </button>
+
+    <input id="fileupload" type="file" name="file" multiple
+           style="display: none;"
+           data-url="{% url 'archives:archive-post' %}"
+           data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+  </div> -->
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+  </form>
+
+  <hr>
+
+  <div class="ui grid">
+    <div class="two wide column"></div>
+    <div class="twelve wide column">
+      <div class="masonry-grid">
+        <div class="ui link cards">
+          {% for archive in archives %}
+            <div class="grid-item">
+              <div class="ui card">
+                <a class="image" href="{{ archive.image.url }}">
+                  {% thumbnail archive.image "200" as im %}
+                    <img src="{{ im.url }}">
+                  {% endthumbnail %}
+                </a>
+                <div class="content">
+                  <a class="header" href="#">{{ archive.title }}</a>
+                  <div class="meta">
+                    <a>{{ archive.description }}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <div class="two wide column"></div>
+  </div>
+
+  <!-- <table id="gallery" class="table table-bordered">
+    <thead>
+      <tr>
+        <th>이미지</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for archive in archives %}
+        <tr>
+          <td>
+            <a href="{{ archive.image.url }}">
+              {% thumbnail archive.image "100x100" crop="center" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+              {% endthumbnail %}
+            </a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table> -->
+
+  <!-- <p><a href="{% url 'home' %}">Return to home</a></p> -->
+{% endblock %}

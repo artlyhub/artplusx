@@ -1,0 +1,35 @@
+html, body {
+  background-color: #fff;
+  overflow-x: hidden;
+}
+
+.navbar {
+  color: black;
+  font-size: 2rem;
+  padding: 1.0rem;
+  padding-bottom: 1.6rem;
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 3rem;
+  border-bottom: solid 3px black;
+  background-color: white;
+}
+
+.logo {
+  cursor: pointer;
+}
+
+.logo:hover {
+  color: #F997A5;
+  transition-duration: 0.2s;
+}
+
+.grid-item {
+  width: 200px;
+  margin-bottom: 10px;
+}
+
+.grid-item--width2 {
+  width: 200px;
+  margin-bottom: 10px;
+}
